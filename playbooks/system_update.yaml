@@ -1,0 +1,19 @@
+---
+- name: System update
+  become: yes
+  hosts: hostsaws
+
+  tasks:
+    - name: Update and upgrade Ubuntu/Debian
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: full
+        name: "*"
+        state: latest
+      when: ansible_distribution in ["Ubuntu", "Debian"]
+
+    - name: Update and upgrade CentOS/RedHat
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+      when: ansible_distribution in ["CentOS", "RedHat"]
