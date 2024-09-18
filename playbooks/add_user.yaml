@@ -1,0 +1,26 @@
+---
+- name: Add user
+  become: yes
+  hosts: hostsaws
+
+  vars:
+    username: devops
+    password_user: "{{ '123qwe!@#' | password_hash('sha512') }}"
+
+  tasks:
+    - name: Add user on  Ubuntu/CentOS
+      ansible.builtin.user:
+        user: "{{ username }}"
+        password: "{{ password_user }}"
+        home: /home/"{{ username }}"
+        shell: /bin/bash
+      when: ansible_distribution in ["Ubuntu", "Debian"]
+
+    - name: add User CentOS
+      ansible.builtin.user:
+        user: "{{ username }}"
+        password: "{{ password_user }}"
+        home: /home/"{{ username }}"
+        shell: /bin/bash
+      when: ansible_distribution in ["CentOS", "RedHat"]
+
